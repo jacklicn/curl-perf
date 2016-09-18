@@ -1,0 +1,202 @@
+diff -Nru curl-7.41.0/configure curl-7.41.0-mod/configure
+--- curl-7.41.0/configure	2015-02-25 07:05:37.000000000 +0800
++++ curl-7.41.0-mod/configure	2016-09-16 18:15:14.920077347 +0800
+@@ -3867,8 +3867,8 @@
+ 
+ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
+ 
+-# Expand $ac_aux_dir to an absolute path.
+-am_aux_dir=`cd "$ac_aux_dir" && pwd`
++# expand $ac_aux_dir to an absolute path
++am_aux_dir=`cd $ac_aux_dir && pwd`
+ 
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+@@ -5528,7 +5528,6 @@
+     as_fn_error $? "Your 'rm' program is bad, sorry." "$LINENO" 5
+   fi
+ fi
+-
+ ## ------------------------------------- ##
+ ##  End of automake initialization code  ##
+ ## ------------------------------------- ##
+@@ -9821,7 +9820,7 @@
+ #endif
+ _LT_EOF
+ 	  # Now try linking the two files.
+-	  mv -f conftest.$ac_objext conftstm.$ac_objext
++	  mv conftest.$ac_objext conftstm.$ac_objext
+ 	  lt_globsym_save_LIBS=$LIBS
+ 	  lt_globsym_save_CFLAGS=$CFLAGS
+ 	  LIBS="conftstm.$ac_objext"
+@@ -13170,9 +13169,9 @@
+ 
+     hpux9*)
+       if test "$GCC" = yes; then
+-	archive_cmds='$RM $output_objdir/$soname~$CC -shared $pic_flag ${wl}+b ${wl}$install_libdir -o $output_objdir/$soname $libobjs $deplibs $compiler_flags~test $output_objdir/$soname = $lib || mv -f $output_objdir/$soname $lib'
++	archive_cmds='$RM $output_objdir/$soname~$CC -shared $pic_flag ${wl}+b ${wl}$install_libdir -o $output_objdir/$soname $libobjs $deplibs $compiler_flags~test $output_objdir/$soname = $lib || mv $output_objdir/$soname $lib'
+       else
+-	archive_cmds='$RM $output_objdir/$soname~$LD -b +b $install_libdir -o $output_objdir/$soname $libobjs $deplibs $linker_flags~test $output_objdir/$soname = $lib || mv -f $output_objdir/$soname $lib'
++	archive_cmds='$RM $output_objdir/$soname~$LD -b +b $install_libdir -o $output_objdir/$soname $libobjs $deplibs $linker_flags~test $output_objdir/$soname = $lib || mv $output_objdir/$soname $lib'
+       fi
+       hardcode_libdir_flag_spec='${wl}+b ${wl}$libdir'
+       hardcode_libdir_separator=:
+@@ -21763,11 +21762,10 @@
+ fi
+ 
+ 
++    # XXX use ssl static libs also go here
+     if test "$ac_cv_lib_ssl_SSL_connect" != yes; then
+                 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ssl with RSAglue/rsaref libs in use" >&5
+ $as_echo_n "checking for ssl with RSAglue/rsaref libs in use... " >&6; };
+-        OLIBS=$LIBS
+-        LIBS="-lRSAglue -lrsaref $LIBS"
+         { $as_echo "$as_me:${as_lineno-$LINENO}: checking for SSL_connect in -lssl" >&5
+ $as_echo_n "checking for SSL_connect in -lssl... " >&6; }
+ if ${ac_cv_lib_ssl_SSL_connect+:} false; then :
+@@ -21810,19 +21808,13 @@
+ 
+ fi
+ 
+-        if test "$ac_cv_lib_ssl_SSL_connect" != yes; then
+-                        { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+-$as_echo "no" >&6; }
+-            LIBS=$OLIBS
+-        else
+-            { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+-$as_echo "yes" >&6; }
++        if test "$ac_cv_lib_ssl_SSL_connect" = yes; then
++            LIBS="-lRSAglue -lrsaref $LIBS"
+         fi
++    fi
+ 
+-    else
+-
+-            for ac_header in openssl/x509.h openssl/rsa.h openssl/crypto.h \
+-                       openssl/pem.h openssl/ssl.h openssl/err.h
++        for ac_header in openssl/x509.h openssl/rsa.h openssl/crypto.h \
++                     openssl/pem.h openssl/ssl.h openssl/err.h
+ do :
+   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+@@ -21831,7 +21823,7 @@
+ #define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
+ _ACEOF
+  curl_ssl_msg="enabled (OpenSSL)"
+-        OPENSSL_ENABLED=1
++      OPENSSL_ENABLED=1
+ 
+ $as_echo "#define USE_OPENSSL 1" >>confdefs.h
+ 
+@@ -21840,8 +21832,8 @@
+ done
+ 
+ 
+-      if test $ac_cv_header_openssl_x509_h = no; then
+-                                for ac_header in x509.h rsa.h crypto.h pem.h ssl.h err.h
++    if test $ac_cv_header_openssl_x509_h = no; then
++                        for ac_header in x509.h rsa.h crypto.h pem.h ssl.h err.h
+ do :
+   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
+ ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+@@ -21855,12 +21847,11 @@
+ done
+ 
+ 
+-        if test $ac_cv_header_x509_h = yes &&
+-           test $ac_cv_header_crypto_h = yes &&
+-           test $ac_cv_header_ssl_h = yes; then
+-                    curl_ssl_msg="enabled (OpenSSL)"
+-          OPENSSL_ENABLED=1
+-        fi
++      if test $ac_cv_header_x509_h = yes &&
++         test $ac_cv_header_crypto_h = yes &&
++         test $ac_cv_header_ssl_h = yes; then
++                  curl_ssl_msg="enabled (OpenSSL)"
++         OPENSSL_ENABLED=1
+       fi
+     fi
+ 
+diff -Nru curl-7.41.0/configure.ac curl-7.41.0-mod/configure.ac
+--- curl-7.41.0/configure.ac	2015-02-25 05:49:02.000000000 +0800
++++ curl-7.41.0-mod/configure.ac	2016-09-16 18:15:14.924077348 +0800
+@@ -21,7 +21,7 @@
+ #***************************************************************************
+ dnl Process this file with autoconf to produce a configure script.
+ 
+-AC_PREREQ(2.57)
++AC_PREREQ(2.13)
+ 
+ dnl We don't know the version number "statically" so we use a dash here
+ AC_INIT([curl], [-], [a suitable curl mailing list: http://curl.haxx.se/mail/])
+@@ -1508,45 +1508,38 @@
+   if test X"$HAVECRYPTO" = X"yes"; then
+     dnl This is only reasonable to do if crypto actually is there: check for
+     dnl SSL libs NOTE: it is important to do this AFTER the crypto lib
+-
++    
+     AC_CHECK_LIB(ssl, SSL_connect)
+-
++    
++    # XXX use ssl static libs also go here
+     if test "$ac_cv_lib_ssl_SSL_connect" != yes; then
+         dnl we didn't find the SSL lib, try the RSAglue/rsaref stuff
+         AC_MSG_CHECKING(for ssl with RSAglue/rsaref libs in use);
+-        OLIBS=$LIBS
+-        LIBS="-lRSAglue -lrsaref $LIBS"
+         AC_CHECK_LIB(ssl, SSL_connect)
+-        if test "$ac_cv_lib_ssl_SSL_connect" != yes; then
+-            dnl still no SSL_connect
+-            AC_MSG_RESULT(no)
+-            LIBS=$OLIBS
+-        else
+-            AC_MSG_RESULT(yes)
++        if test "$ac_cv_lib_ssl_SSL_connect" = yes; then
++            LIBS="-lRSAglue -lrsaref $LIBS"
+         fi
++    fi
+ 
+-    else
+-
+-      dnl Have the libraries--check for SSLeay/OpenSSL headers
+-      AC_CHECK_HEADERS(openssl/x509.h openssl/rsa.h openssl/crypto.h \
+-                       openssl/pem.h openssl/ssl.h openssl/err.h,
+-        curl_ssl_msg="enabled (OpenSSL)"
+-        OPENSSL_ENABLED=1
+-        AC_DEFINE(USE_OPENSSL, 1, [if OpenSSL is in use]))
+-
+-      if test $ac_cv_header_openssl_x509_h = no; then
+-        dnl we don't use the "action" part of the AC_CHECK_HEADERS macro
+-        dnl since 'err.h' might in fact find a krb4 header with the same
+-        dnl name
+-        AC_CHECK_HEADERS(x509.h rsa.h crypto.h pem.h ssl.h err.h)
+-
+-        if test $ac_cv_header_x509_h = yes &&
+-           test $ac_cv_header_crypto_h = yes &&
+-           test $ac_cv_header_ssl_h = yes; then
+-          dnl three matches
+-          curl_ssl_msg="enabled (OpenSSL)"
+-          OPENSSL_ENABLED=1
+-        fi
++    dnl Have the libraries--check for SSLeay/OpenSSL headers
++    AC_CHECK_HEADERS(openssl/x509.h openssl/rsa.h openssl/crypto.h \
++                     openssl/pem.h openssl/ssl.h openssl/err.h,
++      curl_ssl_msg="enabled (OpenSSL)"
++      OPENSSL_ENABLED=1
++      AC_DEFINE(USE_OPENSSL, 1, [if OpenSSL is in use]))
++
++    if test $ac_cv_header_openssl_x509_h = no; then
++      dnl we don't use the "action" part of the AC_CHECK_HEADERS macro
++      dnl since 'err.h' might in fact find a krb4 header with the same
++      dnl name
++      AC_CHECK_HEADERS(x509.h rsa.h crypto.h pem.h ssl.h err.h)
++
++      if test $ac_cv_header_x509_h = yes &&
++         test $ac_cv_header_crypto_h = yes &&
++         test $ac_cv_header_ssl_h = yes; then
++         dnl three matches
++         curl_ssl_msg="enabled (OpenSSL)"
++         OPENSSL_ENABLED=1
+       fi
+     fi
+ 

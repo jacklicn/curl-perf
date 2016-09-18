@@ -1,0 +1,24 @@
+diff -Naru libevent-2.0.22-stable/devpoll.c libevent-2.0.22-stable-mod/devpoll.c
+--- libevent-2.0.22-stable/devpoll.c	2012-02-12 10:10:22.000000000 +0800
++++ libevent-2.0.22-stable-mod/devpoll.c	2016-09-16 10:57:13.175102589 +0800
+@@ -76,7 +76,7 @@
+ 	0
+ };
+ 
+-#define NEVENT	32000
++#define NEVENT	(1<<17)
+ 
+ static int
+ devpoll_commit(struct devpollop *devpollop)
+diff -Naru libevent-2.0.22-stable/epoll.c libevent-2.0.22-stable-mod/epoll.c
+--- libevent-2.0.22-stable/epoll.c	2012-02-11 06:17:14.000000000 +0800
++++ libevent-2.0.22-stable-mod/epoll.c	2016-09-16 10:56:29.639100974 +0800
+@@ -94,7 +94,7 @@
+ };
+ 
+ #define INITIAL_NEVENT 32
+-#define MAX_NEVENT 4096
++#define MAX_NEVENT (1<<17)
+ 
+ /* On Linux kernels at least up to 2.6.24.4, epoll can't handle timeout
+  * values bigger than (LONG_MAX - 999ULL)/HZ.  HZ in the wild can be
