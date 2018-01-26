@@ -120,7 +120,7 @@ clean:
 
 cleanall: clean
 	rm -rf ./build ./packages/curl-$(CURL_VER) \
-	./packages/curl ./include ./lib ./bin $(TAGFILE) \
+	./packages/curl ./include ./lib ./bin ./obj $(TAGFILE) \
 	./packages/c-ares-$(CARES_VER) \
 	*.log *.txt *.ctx *~ ./conf-examples/*~
 
@@ -140,7 +140,7 @@ install:
 
 $(LIBEVENT):
 	mkdir -p $(LIBEVENT_BUILD)
-	mkdir -p ./include; mkdir -p ./lib
+	mkdir -p ./include ./lib ./obj
 	cd $(LIBEVENT_BUILD); tar zxvf ../../packages/libevent-$(LIBEVENT_VER)-stable.tar.gz;
 	cd $(LIBEVENT_MAKE_DIR); patch -p1 < ../../../patches/libevent-nevent.patch; \
 	./configure --prefix=$(LIBEVENT_BUILD) --disable-shared CFLAGS="$(PROF_FLAG) $(DEBUG_FLAGS) $(OPT_FLAGS)"
@@ -150,7 +150,7 @@ $(LIBEVENT):
 
 $(LIBCARES):
 	mkdir -p $(CARES_BUILD)
-	mkdir -p ./include; mkdir -p ./lib
+	mkdir -p ./include ./lib ./obj
 	cd $(CARES_BUILD); tar zxvf ../../packages/c-ares-$(CARES_VER).tar.gz;
 	cd $(CARES_MAKE_DIR); ./configure --prefix=$(CARES_BUILD) --disable-shared CFLAGS="$(PROF_FLAG) $(DEBUG_FLAGS) $(OPT_FLAGS)"
 	make -C $(CARES_MAKE_DIR); make -C $(CARES_MAKE_DIR) install
@@ -159,7 +159,7 @@ $(LIBCARES):
 
 $(LIBOPENSSL):
 	mkdir -p $(OPENSSL_BUILD)
-	mkdir -p ./include; mkdir -p ./lib
+	mkdir -p ./include ./lib ./obj
 	cd $(OPENSSL_BUILD); tar zxvf ../../packages/openssl-$(OPENSSL_VER).tar.gz;
 	cd $(OPENSSL_MAKE_DIR); ./config no-shared --prefix=$(OPENSSL_BUILD)
 	make -C $(OPENSSL_MAKE_DIR); make -C $(OPENSSL_MAKE_DIR) install
@@ -169,7 +169,7 @@ $(LIBOPENSSL):
 	
 $(LIBZ):
 	mkdir -p $(ZLIB_BUILD)
-	mkdir -p ./include; mkdir -p ./lib
+	mkdir -p ./include ./lib ./obj
 	cd $(ZLIB_BUILD); tar zxvf ../../packages/zlib-$(ZLIB_VER).tar.gz;
 	cd $(ZLIB_MAKE_DIR); ./configure --static --prefix=$(ZLIB_BUILD)
 	make -C $(ZLIB_MAKE_DIR); make -C $(ZLIB_MAKE_DIR) install
@@ -180,7 +180,7 @@ $(LIBZ):
 
 $(LIBCURL):
 	mkdir -p $(CURL_BUILD)
-	mkdir -p ./include; mkdir -p ./lib
+	mkdir -p ./include ./lib ./obj
 	cd $(CURL_BUILD); tar zxvf ../../packages/curl-$(CURL_VER).tar.gz;
 	cd $(CURL_MAKE_DIR); patch -p1 < ../../../patches/curl-trace-info-error.patch; \
 	patch -p1 < ../../../patches/curl-configure.patch; \
